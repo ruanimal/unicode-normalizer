@@ -9,14 +9,13 @@ use unicode_normalization::UnicodeNormalization;
 
 const FORMS:[&str; 4] = ["NFC", "NFD", "NFKC", "NFKD"];
 
-/// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(name = "Unicode File Normalizer")]
 #[command(author = "ruanlj <ruanlj@live.com>")]
-#[command(about = format!("Unicode normalize filename to form one of [{}]", FORMS.join(", ")))]
+#[command(about = format!("Unicode normalize filenames in folder to form one of [{}]", FORMS.join(", ")))]
 #[command(long_about = None)]
 struct Args {
-    /// Unicode normal form convert to
+    /// Normalize form
     #[arg(short, long, value_parser = FORMS)]
     to_form: String,
 
