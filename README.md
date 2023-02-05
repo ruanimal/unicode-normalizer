@@ -1,6 +1,6 @@
-# Unicode File Normalizer
+# Unicode Filename Normalizer
 
-Unicode normalize filenames in folder to form one of [NFC, NFD, NFKC, NFKD]  
+Unicode normalize filenames in folder to form one of [NFC, NFD, NFKC, NFKD]
 It works for unicode normalize issues in samba or nfs on macOS，see [detail](https://www.reddit.com/r/DataHoarder/comments/ffqnra/making_smbnfsafp_shares_unicode_normalisation/).
 
 ## usage
@@ -17,6 +17,6 @@ Options:
   -h, --help               Print help
 ```
 
-macOS unicode normalize issues work around
+macOS unicode normalize issues work around, run this on your NFS/Samba server device.
 - NFS: --to-form NFD
 - Samba: --to-form NFC
