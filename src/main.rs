@@ -2,6 +2,7 @@ use std::fs;
 use std::io::Write;
 use clap::Parser;
 use walkdir;
+use chrono::{Local};
 
 extern crate unicode_normalization;
 use unicode_normalization::UnicodeNormalization;
@@ -10,7 +11,7 @@ use unicode_normalization::UnicodeNormalization;
 const FORMS:[&str; 4] = ["NFC", "NFD", "NFKC", "NFKD"];
 
 #[derive(Parser, Debug)]
-#[command(name = "Unicode File Normalizer")]
+#[command(name = "Unicode Filename Normalizer")]
 #[command(author = "ruanlj <ruanlj@live.com>")]
 #[command(about = format!("Unicode normalize filenames in folder to form one of [{}]", FORMS.join(", ")))]
 #[command(long_about = None)]
@@ -53,7 +54,7 @@ fn normalize(form: &String, s: String) -> String {
     }
 }
 
-fn rename_one(path: &String, log_fd: &mut fs::File, form: &String, dry_run: bool) {
+fn rename_one(path: &String, log_fd: &mut fs::File, form: &String, dry_run: bool, today: &String) {
     for entry in walkdir::WalkDir::new(path).contents_first(true) {
         let entry = match entry {
             Ok(i) => i,
@@ -70,14 +71,15 @@ fn rename_one(path: &String, log_fd: &mut fs::File, form: &String, dry_run: bool
             continue;
         }
         let dst = entry.path().parent().unwrap().join(new_filename);
-        let msg = format!("SUCC\t{} -> {}", src.display(), dst.display());
+        let msg = format!("{} -> {}", src.display(), dst.display());
         if dry_run {
-            println!("dry_run:{}", msg);
+            println!("DRY_RUN\t{}", msg);
             continue;
         }
         match fs::rename(&src, &dst) {
             Ok(_) => {
-                println!("{}", msg);
+                println!("SUCC\t{}", msg);
+                log_fd.write_all(format!("[{}]\t", today).as_bytes()).unwrap();
                 log_fd.write_all(msg.as_bytes()).unwrap();
                 log_fd.write_all(b"\n").unwrap();
                 log_fd.sync_data().unwrap();
@@ -89,9 +91,10 @@ fn rename_one(path: &String, log_fd: &mut fs::File, form: &String, dry_run: bool
 
 fn rename(args: &Args) {
     println!("Normalizing to {}, Paths: {:?}", args.to_form, args.path);
-    let mut fd = fs::File::create(&args.log).unwrap();
+    let mut fd = fs::File::options().write(true).create(true).append(true).open(&args.log).unwrap();
+    let today = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
     for p in &args.path {
-        rename_one(&p, &mut fd, &args.to_form, args.dry_run);
+        rename_one(&p, &mut fd, &args.to_form, args.dry_run, &today);
     }
     fd.sync_all().unwrap();
 }
