@@ -1,2 +1,2 @@
 pub mod commands;
-mod renamer;
+pub mod renamer;
