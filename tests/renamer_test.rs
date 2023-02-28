@@ -1,5 +1,3 @@
-extern crate tempdir;
-
 use std::fs;
 use std::fs::File;
 use chrono::{Local};

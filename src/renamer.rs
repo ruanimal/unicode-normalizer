@@ -2,7 +2,6 @@ use std::fs;
 use std::io::Write;
 use walkdir;
 
-extern crate unicode_normalization;
 use unicode_normalization::UnicodeNormalization;
 
 
