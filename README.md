@@ -26,3 +26,4 @@ Learn rust by writing real project.
 
 Some nice rust projects worth learning about.
 - https://github.com/jmacdonald/amp
+- https://github.com/XAMPPRocky/tokei
