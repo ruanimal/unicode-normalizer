@@ -1,10 +1,8 @@
-use crate::renamer::rename_one;
+use crate::renamer::{rename_one, FORMS};
 use std::fs;
 use clap::Parser;
 use chrono::{Local};
 
-
-const FORMS:[&str; 4] = ["NFC", "NFD", "NFKC", "NFKD"];
 
 #[derive(Parser, Debug)]
 #[command(name = "Unicode Filename Normalizer")]

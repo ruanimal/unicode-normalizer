@@ -4,6 +4,8 @@ use walkdir;
 
 use unicode_normalization::UnicodeNormalization;
 
+pub const FORMS:[&str; 4] = ["NFC", "NFD", "NFKC", "NFKD"];
+
 
 pub fn normalize(form: &String, s: String) -> String {
     match form.as_str() {
